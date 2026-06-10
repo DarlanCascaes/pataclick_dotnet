@@ -73,3 +73,31 @@ jobs:
             --store-password-in-clear-text
 
           dotnet nuget list source
+          echo ""
+          echo "===== BUILD ====="
+
+          dotnet restore src/Demo.Library/Demo.Library.csproj
+
+          dotnet build src/Demo.Library/Demo.Library.csproj \
+            --configuration Release \
+            --no-restore
+
+          echo ""
+          echo "===== PACK ====="
+
+          dotnet pack src/Demo.Library/Demo.Library.csproj \
+            --configuration Release \
+            --no-build \
+            --output ./artifacts
+
+          echo ""
+          echo "===== GENERATED PACKAGES ====="
+
+          ls -la ./artifacts
+          echo ""
+          echo "===== PUBLISH ====="
+
+          dotnet nuget push \
+            ./artifacts/*.nupkg \
+            --source jfrog \
+            --skip-duplicate
