@@ -123,3 +123,19 @@ jobs:
           dotnet add package Demo.Library \
             --version 1.0.0 \
             --source https://pataclick.jfrog.io/artifactory/api/nuget/pataclick-nuget-central
+
+          mkdir external
+
+          cd external
+
+          dotnet new console -n ExternalTest
+
+          cd ExternalTest
+          dotnet nuget add source \
+          https://pataclick.jfrog.io/artifactory/api/nuget/pataclick-nuget-central \
+            --name jfrog-virtual \
+            --username "$USERNAME" \
+            --password "$ACCESS_TOKEN" \
+            --store-password-in-clear-text
+          dotnet add package Newtonsoft.Json --version 13.0.4
+          dotnet add package Serilog --version 4.3.0
