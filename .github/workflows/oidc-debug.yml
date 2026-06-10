@@ -131,5 +131,11 @@ jobs:
           dotnet new console -n ExternalTest
 
           cd ExternalTest
+          curl -v \
+            -u "$USERNAME:$ACCESS_TOKEN" \
+            "https://pataclick.jfrog.io/artifactory/api/nuget/pataclick-nuget-central/FindPackagesById()?id='Newtonsoft.Json'"
+          curl -v \
+            -u "$USERNAME:$ACCESS_TOKEN" \
+            "https://pataclick.jfrog.io/artifactory/api/nuget/nuget-api-proxy/FindPackagesById()?id='Newtonsoft.Json'"
           dotnet add package Newtonsoft.Json --version 13.0.4
           dotnet add package Serilog --version 4.3.0
