@@ -101,3 +101,25 @@ jobs:
             ./artifacts/*.nupkg \
             --source jfrog \
             --skip-duplicate
+
+          mkdir consumer
+
+          cd consumer
+
+          dotnet new console -n TestConsumer
+
+          cd TestConsumer
+
+          dotnet nuget remove source jfrog-virtual || true
+
+          dotnet nuget add source \
+          https://pataclick.jfrog.io/artifactory/api/nuget/pataclick-nuget-central \
+            --name jfrog-virtual \
+            --username "$USERNAME" \
+            --password "$ACCESS_TOKEN" \
+            --store-password-in-clear-text
+
+          dotnet nuget list source
+          dotnet add package Demo.Library \
+              --version 1.0.0 \
+              --source jfrog-virtual
