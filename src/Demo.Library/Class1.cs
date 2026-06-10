@@ -1,0 +1,1 @@
+namespace Demo.Library; public class Class1{}
