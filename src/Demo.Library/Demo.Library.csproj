@@ -1,1 +1,23 @@
-<PropertyGroup><PackageId>Demo.Library</PackageId><Version>1.0.0</Version><Authors>DarlanCascaes</Authors><Company>PataClick</Company><Description>OIDC NuGet package test</Description><PackageTags>oidc;jfrog;github</PackageTags>    <RepositoryUrl>https://github.com/DarlanCascaes/pataclick_dotnet</RepositoryUrl><PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance></PropertyGroup>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+
+    <PackageId>Demo.Library</PackageId>
+
+    <Version>1.0.0</Version>
+
+    <Authors>DarlanCascaes</Authors>
+
+    <Company>PataClick</Company>
+
+    <Description>OIDC NuGet package test</Description>
+
+    <PackageTags>oidc;jfrog;github</PackageTags>
+
+    <RepositoryUrl>https://github.com/DarlanCascaes/pataclick_dotnet</RepositoryUrl>
+
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+</Project>
