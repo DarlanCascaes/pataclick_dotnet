@@ -65,13 +65,6 @@ jobs:
           ACCESS_TOKEN=$(echo "$JFROG_RESPONSE" | jq -r '.access_token')
           USERNAME=$(echo "$JFROG_RESPONSE" | jq -r '.username')
 
-          dotnet nuget add source \
-            https://pataclick.jfrog.io/artifactory/api/nuget/pataclick-nuget-release \
-            --name jfrog \
-            --username "$USERNAME" \
-            --password "$ACCESS_TOKEN" \
-            --store-password-in-clear-text
-
           dotnet nuget list source
           echo ""
           echo "===== BUILD ====="
@@ -139,5 +132,4 @@ jobs:
             "https://pataclick.jfrog.io/artifactory/api/nuget/nuget-api-proxy/FindPackagesById()?id='Newtonsoft.Json'"
           curl -u "$USERNAME:$ACCESS_TOKEN" \
             "https://pataclick.jfrog.io/artifactory/api/nuget/pataclick-nuget-central/Packages?\$top=5"
-          dotnet add package Newtonsoft.Json --version 13.0.4
-          dotnet add package Serilog --version 4.3.0
+          dotnet restore
