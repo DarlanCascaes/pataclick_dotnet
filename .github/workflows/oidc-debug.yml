@@ -23,48 +23,34 @@ jobs:
           "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=jfrog-github" \
           | jq -r '.value')
 
-          echo "JWT obtained"
-          echo "Token size: ${#TOKEN}"
+          echo "JWT OK"
+          echo "JWT Length: ${#TOKEN}"
 
-          RESPONSE=$(jq -n \
-          --arg token "$TOKEN" \
+          REQUEST=$(jq -n \
+            --arg token "$TOKEN" \
           '{
-          grant_type:"urn:ietf:params:oauth:grant-type:token-exchange",
-          subject_token_type:"urn:ietf:params:oauth:token-type:id_token",
-          subject_token:$token,
-          provider_name:"github-jfrog-oidc"
+            grant_type:"urn:ietf:params:oauth:grant-type:token-exchange",
+            subject_token_type:"urn:ietf:params:oauth:token-type:id_token",
+            subject_token:$token,
+            provider_name:"github-jfrog-oidc"
           }')
 
-          echo "Sending request to JFrog..."
-
-          curl -s \
+          JFROG_RESPONSE=$(curl -s \
           -X POST \
           https://pataclick.jfrog.io/access/api/v1/oidc/token \
           -H "Content-Type: application/json" \
-          -d "$RESPONSE"
-
-          ACCESS_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token')
+          -d "$REQUEST")
 
           echo ""
-          echo "Testing Artifactory..."
+          echo "===== JFROG RESPONSE ====="
+          echo "$JFROG_RESPONSE"
 
-          curl -s \
-            -H "Authorization: Bearer $ACCESS_TOKEN" \
-            https://pataclick.jfrog.io/artifactory/api/system/ping
+          ACCESS_TOKEN=$(echo "$JFROG_RESPONSE" | jq -r '.access_token')
+          USERNAME=$(echo "$JFROG_RESPONSE" | jq -r '.username')
+          EXPIRES=$(echo "$JFROG_RESPONSE" | jq -r '.expires_in')
 
           echo ""
-          ACCESS_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token')
-
-          echo "Access token size: ${#ACCESS_TOKEN}"
-
-          echo "Username:"
-          echo "$RESPONSE" | jq -r '.username'
-
-          echo "Expires:"
-          echo "$RESPONSE" | jq -r '.expires_in'
-          dotnet nuget add source \
-          https://pataclick.jfrog.io/artifactory/api/nuget/pataclick-nuget-release \
-          --name jfrog \
-          --username "$USERNAME" \
-          --password "$ACCESS_TOKEN" \
-          --store-password-in-clear-text
+          echo "===== PARSED ====="
+          echo "USERNAME=$USERNAME"
+          echo "EXPIRES=$EXPIRES"
+          echo "ACCESS_TOKEN_LENGTH=${#ACCESS_TOKEN}"
