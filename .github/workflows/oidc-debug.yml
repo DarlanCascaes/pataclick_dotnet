@@ -71,3 +71,5 @@ jobs:
             --username "$USERNAME" \
             --password "$ACCESS_TOKEN" \
             --store-password-in-clear-text
+
+          dotnet nuget list source
