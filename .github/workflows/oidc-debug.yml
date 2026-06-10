@@ -53,3 +53,18 @@ jobs:
             https://pataclick.jfrog.io/artifactory/api/system/ping
 
           echo ""
+          ACCESS_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token')
+
+          echo "Access token size: ${#ACCESS_TOKEN}"
+
+          echo "Username:"
+          echo "$RESPONSE" | jq -r '.username'
+
+          echo "Expires:"
+          echo "$RESPONSE" | jq -r '.expires_in'
+          dotnet nuget add source \
+          https://pataclick.jfrog.io/artifactory/api/nuget/pataclick-nuget-release \
+          --name jfrog \
+          --username "$USERNAME" \
+          --password "$ACCESS_TOKEN" \
+          --store-password-in-clear-text
