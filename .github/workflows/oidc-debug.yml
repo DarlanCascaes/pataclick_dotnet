@@ -39,9 +39,9 @@ jobs:
           echo "Token length: ${#TOKEN}"
 
       - name: Exchange JWT for JFrog Token
-      shell: bash
-      run: |
-        RESPONSE=$(curl -s \
+        shell: bash
+        run: |
+          RESPONSE=$(curl -s \
           -X POST \
           https://pataclick.jfrog.io/access/api/v1/oidc/token \
           -H "Content-Type: application/json" \
