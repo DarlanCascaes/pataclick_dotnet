@@ -121,5 +121,5 @@ jobs:
 
           dotnet nuget list source
           dotnet add package Demo.Library \
-              --version 1.0.0 \
-              --source jfrog-virtual
+            --version 1.0.0 \
+            --source https://pataclick.jfrog.io/artifactory/api/nuget/pataclick-nuget-central
