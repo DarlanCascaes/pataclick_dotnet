@@ -37,3 +37,20 @@ jobs:
           echo ""
           echo "Token successfully obtained."
           echo "Token length: ${#TOKEN}"
+
+      - name: Exchange JWT for JFrog Token
+      shell: bash
+      run: |
+        RESPONSE=$(curl -s \
+          -X POST \
+          https://pataclick.jfrog.io/access/api/v1/oidc/token \
+          -H "Content-Type: application/json" \
+          -d "{
+              \"grant_type\":\"urn:ietf:params:oauth:grant-type:token-exchange\",
+              \"subject_token_type\":\"urn:ietf:params:oauth:token-type:id_token\",
+              \"subject_token\":\"$TOKEN\",
+              \"provider_name\":\"github-jfrog-oidc\"
+          }")
+
+          echo "===== JFROG RESPONSE ====="
+          echo "$RESPONSE"
