@@ -54,3 +54,10 @@ jobs:
           echo "USERNAME=$USERNAME"
           echo "EXPIRES=$EXPIRES"
           echo "ACCESS_TOKEN_LENGTH=${#ACCESS_TOKEN}"
+          echo ""
+
+          echo "===== TESTING NUGET ENDPOINT ====="
+
+          curl -v \
+            -u "$USERNAME:$ACCESS_TOKEN" \
+            https://pataclick.jfrog.io/artifactory/api/nuget/pataclick-nuget-release/index.json
