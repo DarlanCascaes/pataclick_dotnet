@@ -16,20 +16,24 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Request OIDC Token
+        shell: bash
         run: |
-          echo "Obtendo JWT..."
+          echo "Requesting OIDC token..."
 
-          TOKEN=$(curl -s \
-            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=jfrog-github" \
-            | jq -r '.value')
+          RESPONSE=$(curl -s \
+          -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+          "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=jfrog-github")
+
+          echo "Raw response:"
+          echo "$RESPONSE"
+
+          TOKEN=$(echo "$RESPONSE" | jq -r '.value')
+
+          if [ "$TOKEN" = "null" ]; then
+            echo "Failed to obtain token"
+            exit 1
+          fi
 
           echo ""
-
-          echo "TOKEN RECEBIDO"
-
-          PAYLOAD=$(echo "$TOKEN" | cut -d '.' -f2 | tr '_-' '/+' | base64 -d 2>/dev/null)
-
-          echo ""
-          echo "===== JWT PAYLOAD ====="
-          echo "$PAYLOAD"
+          echo "Token successfully obtained."
+          echo "Token length: ${#TOKEN}"
