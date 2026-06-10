@@ -42,3 +42,14 @@ jobs:
           https://pataclick.jfrog.io/access/api/v1/oidc/token \
           -H "Content-Type: application/json" \
           -d "$RESPONSE"
+
+          ACCESS_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token')
+
+          echo ""
+          echo "Testing Artifactory..."
+
+          curl -s \
+            -H "Authorization: Bearer $ACCESS_TOKEN" \
+            https://pataclick.jfrog.io/artifactory/api/system/ping
+
+          echo ""
